@@ -1,6 +1,6 @@
 {
   "name": "wrapper-fortnite-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A node wrapper for fortnite-api.com.",
   "main": ".\\build\\index.js",
   "types": ".\\build\\index.d.ts",
@@ -11,7 +11,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["backend", "fortnite", "wrapper", "api"],
   "author": "roteKlaue",
   "license": "MIT",
   "dependencies": {
