@@ -1,9 +1,13 @@
 {
-  "name": "fortnite-api",
+  "name": "wrapper-fortnite-api",
   "version": "1.0.0",
   "description": "A node wrapper for fortnite-api.com.",
   "main": ".\\build\\index.js",
   "types": ".\\build\\index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roteKlaue/fortnite-api-wrapper.gitt"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

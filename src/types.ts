@@ -341,7 +341,47 @@ interface MaterialInstance {
 }
 
 interface BatteRoyaleStats {
+    account: {
+        id: string;
+        name: string;
+    }
+    battlePass: {
+        level: number;
+        progress: number;
+    }
+    image: string;
+    stats: {
+        all: Modes | null;
+        keyboardMouse: Modes | null;
+        gamepad: Modes | null;
+        touch: Modes | null;
+    }
+}
 
+interface Modes {
+    overall: Score;
+    solo: Score;
+    duo: Score;
+    trio: null;
+    squad: Score;
+    ltm: Score;
+}
+
+interface Score {
+    score: number;
+    wins: number;
+    kills: number;
+    deaths: number;
+    matches: number;
+    minutesPlayed: number;
+    playersOutlived: number;
+    scorePerMin: number;
+    killsPerMin: number;
+    scorePerMatch: number;
+    killsPerMatch: number;
+    kd: number;
+    winRate: number;
+    lastModified: Date;
 }
 
 const PLATFORMS = {

@@ -1,4 +1,4 @@
-import { Banner, BannerColor, Cosmetic, LanguageCode, NewCosmetics, LANGUAGES, CreatorCode, Map, News, AES, Playlist, HandlerReply, ReturnType, Shop } from "./types";
+import { Banner, BannerColor, Cosmetic, LanguageCode, NewCosmetics, LANGUAGES, CreatorCode, Map, News, AES, Playlist, HandlerReply, ReturnType, Shop, AccountTypes, ACCOUNT_TYPES, PLATFORMS, Platforms, BatteRoyaleStats } from "./types";
 import { asyncHandler } from "sussy-util";
 import axios from "axios";
 
@@ -9,7 +9,7 @@ import axios from "axios";
  * @returns {Promise<WrappedData<T> | ApiError>} A Promise that resolves with the result or  with an ApiError.
  */
 const handleRequest = async <T>(url: string, headers?: object): ReturnType<T> => {
-    const [result, error] = await asyncHandler(axios.get.bind(axios, ...(headers ? [url] : [url, headers]))) as HandlerReply<T>;
+    const [result, error] = await asyncHandler(axios.get.bind(axios, ...(headers ? [url, headers] : [url]))) as HandlerReply<T>;
     if (error) return { status: error.code, error: error.message };
     return result.data.data;
 }
@@ -172,13 +172,42 @@ const combinedShop = (language: LanguageCode = LANGUAGES.english): ReturnType<Sh
     return handleRequest<Shop>(`https://fortnite-api.com/v2/shop/br/combined?language=${language}`);
 }
 
-const a = {
+const CONFIG = {
     headers: {
-        'Authorization': "api-key"
+        'Authorization': "",
     }
 }
 
+/**
+ * Fetches Battle Royale stats for a Fortnite player by their account name.
+ *
+ * @param {Object} options - Options for fetching stats.
+ * @param {string} options.accountName - The player's Fortnite account name.
+ * @param {AccountTypes} options.accountType - The type of the Fortnite account (e.g., EpicGames).
+ * @param {("season" | "lifetime")} options.timeWindow - The time window for the stats (default is "lifetime").
+ * @param {Platforms} options.platform - The platform on which the player plays (e.g., AllPlatforms).
+ * @param {string} options.apiKey - The API key for authorization.
+ * @returns {Promise<BatteRoyaleStats | ApiError>} A Promise that resolves with Battle Royale stats or rejects with an ApiError.
+ */
+const batteRoyaleStats = ({ accountName, accountType = ACCOUNT_TYPES.EpicGames, timeWindow = "lifetime", platform = PLATFORMS.AllPlatforms, apiKey }: { accountName: string, accountType: AccountTypes, timeWindow: "season" | "lifetime", platform: Platforms, apiKey: string }): ReturnType<BatteRoyaleStats> => {
+    CONFIG.headers.Authorization = apiKey;
+    return handleRequest<BatteRoyaleStats>(`https://fortnite-api.com/v2/stats/br/v2?name=${accountName}&accountType=${accountType}&timeWindow=${timeWindow}&image=${platform}`, CONFIG);
+}
 
+/**
+ * Fetches Battle Royale stats for a Fortnite player by their account ID.
+ *
+ * @param {string} accountID - The player's Fortnite account ID.
+ * @param {string} apiKey - The API key for authorization.
+ * @param {("season" | "lifetime")} timeWindow - The time window for the stats (default is "lifetime").
+ * @param {Platforms} platform - The platform on which the player plays (e.g., AllPlatforms).
+ * @returns {Promise<BatteRoyaleStats | ApiError>} A Promise that resolves with Battle Royale stats or rejects with an ApiError.
+ */
+const batteRoyaleStatsByID = (accountID:string, apiKey:string , timeWindow: "season" | "lifetime" = "lifetime", platform: Platforms = PLATFORMS.AllPlatforms): ReturnType<BatteRoyaleStats> => {
+    CONFIG.headers.Authorization = apiKey;
+    console.log(CONFIG)
+    return handleRequest<BatteRoyaleStats>(`https://fortnite-api.com/v2/stats/br/v2/${accountID}?&timeWindow=${timeWindow}&image=${platform}`, CONFIG);
+}
 
 export {
     aesKey,
@@ -205,4 +234,7 @@ export {
 
     shop,
     combinedShop,
+
+    batteRoyaleStats,
+    batteRoyaleStatsByID
 }
